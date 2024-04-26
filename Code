@@ -1,0 +1,126 @@
+//var snakeX = 30;
+//var snakeY = 30; 
+var score = 1;
+var numFood = 100;
+var gameOver = false;
+//frameRate(1);
+var foodsX = round(random(0,400));
+var foodsY = round(random(0,400));
+var index = 0;
+
+var Snake = function(x, y) {
+    this.x = x;
+    this.y = y;
+};
+
+Snake.prototype.draw = function() {
+    ellipse(this.x, this.y, 20,20);
+};
+
+Snake.prototype.right = function()
+{
+    ellipse(this.x, this.y, 20,20);
+    this.x += 1;
+    
+};
+
+Snake.prototype.left = function()
+{
+    ellipse(this.x, this.y, 20,20);
+    this.x -= 1;
+    
+};
+
+Snake.prototype.up = function()
+{
+    ellipse(this.x, this.y, 20,20);
+    this.y -= 1;
+    
+};
+
+Snake.prototype.down = function()
+{
+    ellipse(this.x, this.y, 20,20);
+    this.y += 1;
+    
+};
+
+
+var Food = function(x, y) {
+    this.x = x;
+    this.y = y;
+};
+
+Food.prototype.draw = function() {
+    //rectMode(CENTER);
+    image(getImage("avatars/aqualine-seed"), this.x, this.y, 50, 50); //Replace Food image with Bitmoji
+};
+
+var foods = [];
+for (var i = 0; i < numFood; i++) {  
+    foods.push(new Food(round(random(0,400)), round(random(0, 400))));
+}
+
+Snake.prototype.checkForFoodGrab = function(food,snake) {
+    if ((food.x >= snake.x && food.x <= (snake.x + 40)) &&
+        (food.y >= snake.y && food.y <= (snake.y + 40))) {
+        food.y = -400;
+        score++;
+        index++;
+        if (score >= numFood) {
+            gameOver = true; //Ends the game after 100 food is grabbed
+        }
+    }
+};
+
+// Function to place food on the game board
+var placeFood = function() {
+    //if (!Food) { // Place new food only if there is no existing food
+        //var foodX = round(random(0, 400));
+        //var foodY = round(random(0, 400));
+        //newFood = new Food(foodX, foodY);
+    //}
+};
+
+var playerSnake = new Snake( 100,100);
+
+draw = function() 
+{
+    // static
+    background(245, 12, 78);
+    fill(0, 255, 26);
+    text("Score:" + score,40,40);
+    // Draw the food
+    //placeFood();
+    foods[index].draw();
+
+    // Place new food if the game is not over
+    if (!gameOver) {
+      //placeFood();
+      if (keyIsPressed && keyCode === DOWN)
+        {
+            playerSnake.down();
+        }
+        else if (keyIsPressed && keyCode === RIGHT)
+        {
+            playerSnake.right();
+        }
+        else if (keyIsPressed && keyCode === LEFT)
+        {
+            playerSnake.left();
+        }
+        else if (keyIsPressed && keyCode === UP)
+        {
+            playerSnake.up();
+
+        }
+        playerSnake.draw();
+    }
+    
+    //for (var i = 0; i < foods.length; i++) {
+       //foods[i].draw();
+        playerSnake.checkForFoodGrab(foods[index], playerSnake);
+        //foods[i].x += foods[i].speed;
+    //}
+    
+};
