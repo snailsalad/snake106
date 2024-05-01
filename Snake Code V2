@@ -89,13 +89,13 @@ draw = function() {
     background(245, 12, 78);
     fill(0, 255, 26);
     text("Score:" + score, 40, 40);
-    // Draw the current food object
-    foods[index].draw();
 
-    // Place new food if the game is not over
+ // Place new food if the game is not over
     if (!gameOver) {
         playerSnake.move();
         playerSnake.draw();
+        // Draw the current food object
+        foods[index].draw();
     }
 
     // Check for food grab
