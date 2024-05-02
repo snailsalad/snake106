@@ -3,7 +3,7 @@
 var score = 1;
 var numFood = 100;
 var gameOver = false;
-//frameRate(1);
+frameRate(15);
 var foodsX = round(random(10,370));
 var foodsY = round(random(5,370));
 var index = 0;
@@ -17,7 +17,6 @@ var Snake = function(x, y) {
 
 Snake.prototype.draw = function() {
     fill(0, 255, 72);
-    noStroke();
     for (var i = 0; i < this.segments.length; i++) {
         ellipse(this.segments[i].x, this.segments[i].y, 20, 20);
     }
@@ -28,13 +27,13 @@ Snake.prototype.move = function() {
     var newY = this.y;
     // Move the snake according to the current direction
     if (this.direction === "right") {
-        this.x += 1;
+        this.x += 10;
     } else if (this.direction === "left") {
-        this.x -= 1;
+        this.x -= 10;
     } else if (this.direction === "up") {
-        this.y -= 1;
+        this.y -= 10;
     } else if (this.direction === "down") {
-        this.y += 1;
+        this.y += 10;
     }
     // Add a new segment to the beginning of the segments array
     var newSegment = { x: newX, y: newY };
@@ -42,8 +41,9 @@ Snake.prototype.move = function() {
 
     // Remove the last segment if the snake didn't eat food
     if (!this.ateFood) {
-    this.segments.splice(this.segments.length - 1, 1); // Remove the last segment from the array
+    this.segments.length -= 1; // Remove the last segment from the array
     }
+    this.ateFood = false;
 };
 
 Snake.prototype.setDirection = function(newDirection) {
