@@ -7,7 +7,6 @@ var foodsX = round(random(10,370));
 var foodsY = round(random(5,370));
 var index = 0;
 
-
 var bodyJersey = function(x,y,bitmojiHeight){
     fill(64, 3, 232);//dark blue
     triangle(x+108*(bitmojiHeight/150),y+170*(bitmojiHeight/150),x+108*(bitmojiHeight/150),y+105*(bitmojiHeight/150),x+55*(bitmojiHeight/150),y+170*(bitmojiHeight/150));//jersey
@@ -129,7 +128,7 @@ var drawAaronBitmoji = function(bitmojiObject) {
         line(x + (h / 150 * 140), y + (h / 150 * 218), x + (h / 150 * 106), y + (h / 150 * 188));
         }
 };
-
+//Button Class
 var Button = function(config) {
     this.x = config.x || 0;
     this.y = config.y || 0;
@@ -199,6 +198,8 @@ var Snake = function(x, y) {
 
 Snake.prototype.draw = function() {
     fill(0, 255, 72);
+    //Draws the Snake
+    noStroke();
     for (var i = 0; i < this.segments.length; i++) {
         ellipse(this.segments[i].x, this.segments[i].y, 20, 20);
     }
@@ -226,17 +227,18 @@ Snake.prototype.move = function() {
     this.segments.length -= 1; // Remove the last segment from the array
     }
     this.ateFood = false;
-    
+    //If the snake goes off the screen, the game ends 
     if(this.x < 5 || this.x > 395 || this.y < 5 || this.y > 395)
     {
         gameOver = true;
     }
+    //Tells if the snake touches the tail, if so the game ends 
     for (var i = 1; i < this.segments.length; i++) {
         var segment = this.segments[i];
-        if (this.x === segment.x && this.y === segment.y) {
+        if (this.x === segment.x && this.y === segment.y) 
+        {
             gameOver = true;
-            break;
-            
+            break; //Ends the loop 
         }
     }
     if (gameOver === true)
@@ -256,9 +258,13 @@ Snake.prototype.setDirection = function(newDirection) {
 var Food = function(x, y) {
     this.x = x;
     this.y = y;
+    this.bitmojiNumber = 1;
 };
-
+//Sets Aaron equal to the food
 Food.prototype.draw = function() {
+    //var randomBitmoji = round(random(0.5,2.4));
+    if(score % 2 === 0)
+    {
     drawAaronBitmoji({	
     x:this.x,
     y:this.y,
@@ -266,9 +272,25 @@ Food.prototype.draw = function() {
     shirtColor:color(255, 0, 0),
     initials:true
     });
-    //image(getImage("avatars/aqualine-seed"), this.x, this.y, 50, 50); //Replace Food image with Bitmoji
+    }
+    else
+    {
+        drawBitmoji(this.x, this.y, 30);
+    }
 };
 
+/*Food.prototype.toggle = function()
+{
+    if(this.bitmojiNumber === 1)
+    {
+        this.bitmojiNumber = 2;
+    }
+    else if (this.bitmojiNumber === 2) 
+    {
+        this.bitmojiNumber = 1;
+    }
+};*/
+//Places a new food at a random location, after it is eaten
 var foods = [];
 for (var i = 0; i < numFood; i++) {  
     foods.push(new Food(round(random(10, 370)), round(random(5, 370))));
@@ -287,17 +309,17 @@ Snake.prototype.checkForFoodGrab = function(food) {
         // Set the position of the food object to a random location
         food.x = round(random(0, 400));
         food.y = round(random(0, 400));
-        this.ateFood = true; // Set ateFood flag for Snake growth
+        this.ateFood = true;// Set ateFood flag for Snake growth
     }
 };
-
+//Draws the snake
 var playerSnake = new Snake(100, 100);
-
+//The game screen
 var gameScreen = function ()
 {
     background(255, 0, 0);
 };
-
+//The end screen
 var endScreen = function()
 {
     background(255, 60, 255);
@@ -307,32 +329,33 @@ var endScreen = function()
     textSize(20);
     text("Your Score: " + score, 121,192);
 };
-
+//Part of the Button Class 
 mouseClicked = function()
 {
     startButton.handleMouseClick();
 };
 
 draw = function() {
-     if (currentScene === 0)
-     {
-         splashScreen();
-     }
-     
-     else if (currentScene === 2)
-     {
-         endScreen();
-     }
-     
-     else if (currentScene === 1)
-     {
-         gameScreen();
-         // static
+    //Displays the Splash Screen
+    if (currentScene === 0)
+    {
+        splashScreen();
+    }
+    //Displays the End Screen 
+    else if (currentScene === 2)
+    {
+        endScreen();
+    }
+    //Displays the game screen
+    else if (currentScene === 1)
+    {
+    gameScreen();
+    // static
     background(245, 12, 78);
     fill(0, 255, 26);
     text("Score:" + score, 40, 40);
 
- // Place new food if the game is not over
+    //Place new food if the game is not over
     if (!gameOver) {
         playerSnake.move();
         playerSnake.draw();
@@ -342,9 +365,9 @@ draw = function() {
 
     // Check for food grab
     playerSnake.checkForFoodGrab(foods[index]);
-     }
+    }
 };
-
+//Checks for which key is pressed, and then moves the snake accordingly 
 keyPressed = function() {
     if (keyCode === DOWN) {
         playerSnake.setDirection("down");
